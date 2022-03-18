@@ -210,6 +210,11 @@ class PaymentService
             }
         
             $this->paymentHelper->createPlentyPayment($requestData);
+            if($requestData['tid_status'] == 75) {
+                $this->paymentHelper->updateOrderStatus((int) $requestData['order_no'], (float) 3);
+            } elseif (in_array($requestData['payment_id'], ['40', '41']) && in_array($requestData['tid_status'], ['91', '99'])) {
+                $this->paymentHelper->updateOrderStatus((int) $requestData['order_no'], (float) 4);
+            }
            
             return [
                 'type' => 'success',
