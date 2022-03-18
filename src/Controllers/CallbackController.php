@@ -438,7 +438,7 @@ class CallbackController extends Controller
                     if(in_array($this->aryCaptureParams['tid_status'], ['91', '99']) && $transactionStatus == '75') {
                         $saveAdditionData = true;
                         $callbackComments = sprintf($this->paymentHelper->getTranslatedText('callback_pending_to_onhold_status_change',$orderLanguage), $this->aryCaptureParams['tid'], date('d.m.Y'), date('H:i:s'));
-                        $this->paymentHelper->updateOrderStatus($nnTransactionHistory->orderNo, (float) 4);
+                        
                     } elseif ($this->aryCaptureParams['tid_status'] == '100' && in_array($transactionStatus, [ '75', '91', '99' ])) {
                         $saveAdditionData = true;
                         $callbackComments = sprintf($this->paymentHelper->getTranslatedText('callback_order_confirmation_text',$orderLanguage), date('d.m.Y'), date('H:i:s')); 
@@ -470,6 +470,10 @@ class CallbackController extends Controller
                                         }
                                         $this->paymentHelper->createPlentyPayment($paymentData);
                     }
+                    // Update order status for guarantee payment is in on-hold
+                    if(in_array($this->aryCaptureParams['tid_status'], ['91', '99']) && $transactionStatus == '75') {
+                        $this->paymentHelper->updateOrderStatus($nnTransactionHistory->orderNo, (float) 4);
+                    }    
                     $this->paymentHelper->updatePayments($this->aryCaptureParams['tid'], $this->aryCaptureParams['tid_status'], $nnTransactionHistory->orderNo);
                     if (!empty($callbackComments)) {
                      $this->sendCallbackMail($callbackComments); 
