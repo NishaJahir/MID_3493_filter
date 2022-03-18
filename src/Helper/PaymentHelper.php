@@ -725,4 +725,31 @@ class PaymentHelper
             return null;
         }
     }
+    
+    /**
+     * Update order status by order id
+     *
+     * @param int $orderId
+     * @param float $statusId
+     */
+    public function updateOrderStatus($orderId, $statusId)
+    {
+        try {
+            /** @var \Plenty\Modules\Authorization\Services\AuthHelper $authHelper */
+            $authHelper = pluginApp(AuthHelper::class);
+            $authHelper->processUnguarded(
+                    function () use ($orderId, $statusId) {
+                    //unguarded
+                    $order = $this->orderRepository->findOrderById($orderId);
+
+                    if (!is_null($order) && $order instanceof Order) {
+                        $status['statusId'] = (float) $statusId;
+                        $this->orderRepository->updateOrder($status, $orderId);
+                    }
+                }
+            );
+        } catch (\Exception $e) {
+            $this->getLogger(__METHOD__)->error('Novalnet::updateOrderStatus', $e);
+        }
+    }
 }
