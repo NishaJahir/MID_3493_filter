@@ -30,11 +30,8 @@
   document.addEventListener('historyPaymentMethodChanged', e => {
     for(let property in e.detail.newOrder.order.properties){
       if(e.detail.newOrder.order.properties[property].typeId === 3){
-      console.log(e.detail.newOrder.order.properties[property].value);
-       for(let methodId in paymentMethodIds) {
-       console.log(methodId);
-       console.log(paymentMethodId);
-       if (e.detail.newOrder.order.properties[property].value ==  paymentMethodIds[methodId]) {
+       for(let paymentMethodId in paymentMethodIds) {
+       if (e.detail.newOrder.order.properties[property].value ==  paymentMethodIds[paymentMethodId]) {
           document.getElementById("nnReinitPaymentMethod-" + e.detail.oldOrder.id).style.display = "block";
         } else {
           document.getElementById("nnReinitPaymentMethod-" + e.detail.oldOrder.id).style.display = "none";
