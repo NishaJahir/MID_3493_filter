@@ -30,15 +30,15 @@
   document.addEventListener('historyPaymentMethodChanged', e => {
     for(let property in e.detail.newOrder.order.properties){
       if(e.detail.newOrder.order.properties[property].typeId === 3){
-       
-       console.log(e.detail.newOrder.order.properties[property].value);
-      
-       if (e.detail.newOrder.order.properties[property].value ==  {{paymentMethodIds.id}}) {
+      console.log(e.detail.newOrder.order.properties[property].value);
+       for(let paymentMethodId in paymentMethodIds) {
+       console.log(paymentMethodId);
+       if (e.detail.newOrder.order.properties[property].value ==  paymentMethodIds[paymentMethodId]) {
           document.getElementById("nnReinitPaymentMethod-" + e.detail.oldOrder.id).style.display = "block";
         } else {
           document.getElementById("nnReinitPaymentMethod-" + e.detail.oldOrder.id).style.display = "none";
         }
-     
+       }
       }
     }
   });
