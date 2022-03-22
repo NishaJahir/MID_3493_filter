@@ -27,26 +27,18 @@
   });
  
   var paymentMethodIds = jQuery('#nn_mop_id').val();
-  let text = paymentMethodIds.toString();
-  console.log(text);
   document.addEventListener('historyPaymentMethodChanged', e => {
     for(let property in e.detail.newOrder.order.properties){
       if(e.detail.newOrder.order.properties[property].typeId === 3){
-       for(let paymentMethodId in paymentMethodIds) {
+       
        console.log(e.detail.newOrder.order.properties[property].value);
       
-       if (e.detail.newOrder.order.properties[property].value ==  paymentMethodIds[paymentMethodId]) {
-        console.log('if');
-        let text = paymentMethodIds[paymentMethodId].toString();
-        console.log(text);
+       if (e.detail.newOrder.order.properties[property].value ==  {{paymentMethodIds.id}}) {
           document.getElementById("nnReinitPaymentMethod-" + e.detail.oldOrder.id).style.display = "block";
         } else {
-        console.log('else');
-         let text = paymentMethodIds[paymentMethodId].toString();
-        console.log(text);
           document.getElementById("nnReinitPaymentMethod-" + e.detail.oldOrder.id).style.display = "none";
         }
-       }
+     
       }
     }
   });
