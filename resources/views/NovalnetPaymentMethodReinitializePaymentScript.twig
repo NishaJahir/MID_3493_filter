@@ -27,6 +27,7 @@
   });
  
   var paymentMethodIds = jQuery('#nn_mop_id').val();
+  console.log(paymentMethodIds);
   document.addEventListener('historyPaymentMethodChanged', e => {
     for(let property in e.detail.newOrder.order.properties){
       if(e.detail.newOrder.order.properties[property].typeId === 3){
