@@ -719,7 +719,7 @@ class PaymentService
                 $amount        = !empty($orderAmount) ? $orderAmount : (sprintf('%0.2f', $basket->basketAmount) * 100);
 
                 $billingAddressId = !empty($basket->customerInvoiceAddressId) ? $basket->customerInvoiceAddressId : $billingInvoiceAddrId;
-                $billingAddress = $this->addressRepository->findAddressById($billingAddressId);
+                $billingAddress = $this->paymentHelper->getCustomerBillingOrShippingAddress((int) $billingAddressId);
                 $customerBillingIsoCode = strtoupper($this->countryRepository->findIsoCode($billingAddress->countryId, 'iso_code_2'));
 
                 $shippingAddressId = !empty($basket->customerShippingAddressId) ? $basket->customerShippingAddressId : $shippingInvoiceAddrId;
@@ -730,7 +730,7 @@ class PaymentService
                 $addressValidation = false;
                 if(!empty($shippingAddressId))
                 {
-                    $shippingAddress = $this->addressRepository->findAddressById($shippingAddressId);
+                    $shippingAddress = $this->paymentHelper->getCustomerBillingOrShippingAddress((int) $shippingAddressId);
                     $customerShippingIsoCode = strtoupper($this->countryRepository->findIsoCode($shippingAddress->countryId, 'iso_code_2'));
 
                     // Billing address
