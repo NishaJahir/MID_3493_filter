@@ -31,6 +31,8 @@
     for(let property in e.detail.newOrder.order.properties){
       if(e.detail.newOrder.order.properties[property].typeId === 3){
        for(let paymentMethodId in paymentMethodIds) {
+       console.log(e.detail.newOrder.order.properties[property].value);
+       console.log(paymentMethodIds[paymentMethodId]);
        if (e.detail.newOrder.order.properties[property].value ==  paymentMethodIds[paymentMethodId]) {
           document.getElementById("nnReinitPaymentMethod-" + e.detail.oldOrder.id).style.display = "block";
         } else {
