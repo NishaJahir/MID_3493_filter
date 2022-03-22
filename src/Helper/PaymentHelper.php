@@ -29,6 +29,7 @@ use \Plenty\Modules\Authorization\Services\AuthHelper;
 use Plenty\Modules\Comment\Contracts\CommentRepositoryContract;
 use Plenty\Modules\Order\Shipping\Countries\Contracts\CountryRepositoryContract;
 use Plenty\Modules\Frontend\Session\Storage\Contracts\FrontendSessionStorageFactoryContract;
+use Plenty\Modules\Account\Address\Contracts\AddressRepositoryContract;
 use Novalnet\Constants\NovalnetConstants;
 use Novalnet\Services\TransactionService;
 
@@ -94,6 +95,11 @@ class PaymentHelper
      * @var transaction
      */
     private $transaction;
+    
+    /**
+     * @var AddressRepositoryContract
+     */
+    private $addressRepository;
 
     /**
      * Constructor.
@@ -115,6 +121,7 @@ class PaymentHelper
                                 CommentRepositoryContract $orderComment,
                                 ConfigRepository $configRepository,
                                 FrontendSessionStorageFactoryContract $sessionStorage,
+                                AddressRepositoryContract $addressRepository,
                                 TransactionService $tranactionService,
                                 CountryRepositoryContract $countryRepository
                               )
@@ -126,6 +133,7 @@ class PaymentHelper
         $this->orderComment                   = $orderComment;      
         $this->config                         = $configRepository;
         $this->sessionStorage                 = $sessionStorage;
+        $this->addressRepository              = $addressRepository;
         $this->transaction                    = $tranactionService;
         $this->countryRepository              = $countryRepository;
     }
@@ -750,6 +758,27 @@ class PaymentHelper
             );
         } catch (\Exception $e) {
             $this->getLogger(__METHOD__)->error('Novalnet::updateOrderStatus', $e);
+        }
+    }
+    
+    /**
+     * get billing/shipping address by its id
+     *
+     * @param int $addressId
+     * @return object
+     */
+    public function getCustomerBillingOrShippingAddress(int $addressId)
+    {
+        try {
+            /** @var \Plenty\Modules\Authorization\Services\AuthHelper $authHelper */
+            $authHelper = pluginApp(AuthHelper::class);
+            $addressDetails = $authHelper->processUnguarded(function () use ($addressId) {
+                //unguarded
+               return $this->addressRepository->findAddressById($addressId);
+            });
+            return $addressDetails;
+        } catch (\Exception $e) {
+            $this->getLogger(__METHOD__)->error('Novalnet::getCustomerBillingOrShippingAddress', $e);
         }
     }
 }
