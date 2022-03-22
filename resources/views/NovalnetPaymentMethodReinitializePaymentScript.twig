@@ -27,7 +27,8 @@
   });
  
   var paymentMethodIds = jQuery('#nn_mop_id').val();
-  console.log(paymentMethodIds);
+  let text = paymentMethodIds.toString();
+  console.log(text);
   document.addEventListener('historyPaymentMethodChanged', e => {
     for(let property in e.detail.newOrder.order.properties){
       if(e.detail.newOrder.order.properties[property].typeId === 3){
@@ -36,11 +37,13 @@
       
        if (e.detail.newOrder.order.properties[property].value ==  paymentMethodIds[paymentMethodId]) {
         console.log('if');
-        console.log(paymentMethodIds[paymentMethodId]);
+        let text = paymentMethodIds[paymentMethodId].toString();
+        console.log(text);
           document.getElementById("nnReinitPaymentMethod-" + e.detail.oldOrder.id).style.display = "block";
         } else {
         console.log('else');
-         console.log(paymentMethodIds[paymentMethodId]);
+         let text = paymentMethodIds[paymentMethodId].toString();
+        console.log(text);
           document.getElementById("nnReinitPaymentMethod-" + e.detail.oldOrder.id).style.display = "none";
         }
        }
