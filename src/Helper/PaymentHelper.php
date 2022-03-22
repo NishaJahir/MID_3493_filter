@@ -781,4 +781,8 @@ class PaymentHelper
             $this->getLogger(__METHOD__)->error('Novalnet::getCustomerBillingOrShippingAddress', $e);
         }
     }
+    
+    public function logger($k, $v) {
+         $this->getLogger(__METHOD__)->error($k, $v);
+    }
 }
