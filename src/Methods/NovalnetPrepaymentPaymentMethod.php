@@ -160,6 +160,8 @@ class NovalnetPrepaymentPaymentMethod extends PaymentMethodService
     public function isSwitchableFrom($orderId = null): bool
     {
     if($orderId > 0) {
+        $orderObj = $this->paymentHelper->getOrderObject($orderId);
+        $this->getLogger(__METHOD__)->error('order obj', $orderObj);
         $tid_status = $this->paymentHelper->getNovalnetTxStatus($orderId);
         if(!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) {
             return true;
