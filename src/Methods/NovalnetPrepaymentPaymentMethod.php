@@ -22,6 +22,7 @@ use Novalnet\Helper\PaymentHelper;
 use Novalnet\Services\PaymentService;
 use Plenty\Modules\Basket\Models\Basket;
 use Plenty\Modules\Basket\Contracts\BasketRepositoryContract;
+use Plenty\Plugin\Log\Loggable;
 
 /**
  * Class NovalnetPrepaymentPaymentMethod
@@ -30,6 +31,7 @@ use Plenty\Modules\Basket\Contracts\BasketRepositoryContract;
  */
 class NovalnetPrepaymentPaymentMethod extends PaymentMethodService
 {
+    use Loggable;
     /**
      * @var ConfigRepository
      */
