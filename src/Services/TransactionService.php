@@ -92,4 +92,16 @@ class TransactionService
         $database->save($order);
     }
     
+    public function deleteTransactionData($key, $value)
+    {
+        $database = pluginApp(DataBase::class);
+        $orderDetails    = $database->query(TransactionLog::class)->where($key, '=', $value)->get();
+        foreach($orderDetails as $orderDetail) {
+            $additionalInfo = json_decode($orderDetail->additionalInfo, true);
+            if(isset($additionalInfo['is_novalnet_callback_executed'])) {
+                $database->delete($orderDetail);
+            }
+        }
+    }
+    
 }
