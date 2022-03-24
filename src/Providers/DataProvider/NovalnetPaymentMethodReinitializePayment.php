@@ -119,14 +119,7 @@ class NovalnetPaymentMethodReinitializePayment
          $sessionStorage->getPlugin()->setValue('nnProcessb2bGuarantee', null);
       }
       
-      $hideReinitButton = false;
-      $orderDetails = $transactionService->getTransactionData('orderNo', $order['id']);
-      foreach($orderDetails as $orderDetail) {
-            $additionalInfo = json_decode($orderDetail->additionalInfo, true);
-            if(isset($additionalInfo['is_novalnet_callback_executed'])) {
-                $hideReinitButton = true;
-            }
-      }
+      
     
     $paymentHelper->logger('page call', 'yes called');
     
