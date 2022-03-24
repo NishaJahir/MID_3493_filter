@@ -119,10 +119,11 @@ class NovalnetPaymentMethodReinitializePayment
       
      // Get value from the session for the communication break check
      $isPaymentRequestSend = $sessionStorage->getPlugin()->getValue('nnPaymentRequestSend');
+     $sessionStorage->getPlugin()->setValue('nnPaymentRequestSend', null);
     
       $paymentHelper->logger('tid status', $tid_status);
       $paymentHelper->logger('tid key', $paymentKey);
-       $paymentHelper->logger('isPaymentRequestSend', $isPaymentRequestSend);
+       $paymentHelper->logger('isPaymentRequestSendNNNNN', $isPaymentRequestSend);
     
        // If the Novalnet payments are rejected do the reinitialize payment
        if( strpos($paymentKey, 'NOVALNET') !== false &&  ( (!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || (empty($tid_status) && $isPaymentRequestSend != true) )) {
