@@ -161,7 +161,16 @@ class NovalnetIdealPaymentMethod extends PaymentMethodService
     {
     if($orderId > 0) {
         $tid_status = $this->paymentHelper->getNovalnetTxStatus($orderId);
-        if(!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) {
+        $sendPaymentCall = true;
+        $orderDetails = $this->transaction->getTransactionData('orderNo', $orderId);
+        foreach($orderDetails as $orderDetail) {
+                $additionalInfo = json_decode($orderDetail->additionalInfo, true);
+                if(isset($additionalInfo['is_novalnet_callback_executed'])) {
+                    $sendPaymentCall = false;
+                }
+         }
+        
+        if((!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || ($sendPaymentCall != true && empty($tid_status)) ) {
             return true;
         }
         }
