@@ -177,8 +177,8 @@ class NovalnetIdealPaymentMethod extends PaymentMethodService
                     $sendPaymentCall = false;
                 }
          }
-        
-        if((!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || ($sendPaymentCall != true && empty($tid_status)) ) {
+        $this->paymentHelper->logger('call change', $sendPaymentCall);
+        if((!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || ($sendPaymentCall == true && empty($tid_status)) ) {
             return true;
         }
         }
