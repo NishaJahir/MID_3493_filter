@@ -117,15 +117,6 @@ class NovalnetPaymentMethodReinitializePayment
          $sessionStorage->getPlugin()->setValue('nnProcessb2bGuarantee', null);
       }
       
-     // Get value from the session for the communication break check
-     $isPaymentRequestSend = $sessionStorage->getPlugin()->getValue('nnPaymentRequestSend');
-     $reinitPageCalled = $isPaymentRequestSend;
-     $t = $sessionStorage->getPlugin()->setValue('nnPaymentRequestSend', null);
-
-       $paymentHelper->logger('789654', $reinitPageCalled);
-    $paymentHelper->logger('79', $t);
-
-   
     
        // If the Novalnet payments are rejected do the reinitialize payment
        if( strpos($paymentKey, 'NOVALNET') !== false &&  ( (!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || (empty($tid_status) && $reinitPageCalled != true) )) {
@@ -145,8 +136,7 @@ class NovalnetPaymentMethodReinitializePayment
             'nnGuaranteeStatus' => $show_birthday,
             'orderAmount' => $orderAmount,
             'billingAddressId' => $order['billingAddress']['id'],
-            'shippingAddressId' => $order['deliveryAddress']['id'],
-            'isPaymentRequestSend' => $reinitPageCalled
+            'shippingAddressId' => $order['deliveryAddress']['id']
           ]);
        } else {
           return '';
