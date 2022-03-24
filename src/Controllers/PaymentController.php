@@ -273,7 +273,7 @@ class PaymentController extends Controller
         $this->sessionStorage->getPlugin()->setValue('nnOrderNo', null);
         $this->sessionStorage->getPlugin()->setValue('nnPaymentRequestSend', true);
         $sendPaymentCall = true;
-        $orderDetails = $this->transactionLogData->getTransactionData('orderNo', $paymentRequestData['order_no']);
+        $orderDetails = $this->transaction->getTransactionData('orderNo', $paymentRequestData['order_no']);
         foreach($orderDetails as $orderDetail) {
                 $additionalInfo = json_decode($orderDetail->additionalInfo, true);
                 if(isset($additionalInfo['is_novalnet_callback_executed'])) {
