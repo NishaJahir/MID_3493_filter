@@ -264,7 +264,8 @@ class PaymentController extends Controller
      *
      */
     public function redirectPayment()
-    {        
+    {   
+        $this->paymentHelper->logger('this called', redirect payment);
         $paymentRequestData = $this->sessionStorage->getPlugin()->getValue('nnPaymentData');
         $orderNo = $this->sessionStorage->getPlugin()->getValue('nnOrderNo');
         $paymentRequestData['order_no'] = $orderNo;
