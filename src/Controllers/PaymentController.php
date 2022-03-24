@@ -265,13 +265,13 @@ class PaymentController extends Controller
      */
     public function redirectPayment()
     {   
-        $this->paymentHelper->logger('this called', 'redirect payment');
         $paymentRequestData = $this->sessionStorage->getPlugin()->getValue('nnPaymentData');
         $orderNo = $this->sessionStorage->getPlugin()->getValue('nnOrderNo');
         $paymentRequestData['order_no'] = $orderNo;
         $paymentUrl = $this->sessionStorage->getPlugin()->getValue('nnPaymentUrl');
         $this->sessionStorage->getPlugin()->setValue('nnPaymentData', null);
         $this->sessionStorage->getPlugin()->setValue('nnOrderNo', null);
+        $this->sessionStorage->getPlugin()->setValue('nnPaymentRequestSend', true);
         if(!empty($paymentRequestData['order_no'])) {
             $this->sessionStorage->getPlugin()->setValue('nnPaymentDataUpdated', $paymentRequestData);  
             return $this->twig->render('Novalnet::NovalnetPaymentRedirectForm', [
@@ -279,8 +279,6 @@ class PaymentController extends Controller
                                                                 'nnPaymentUrl' => $paymentUrl
                                    ]);
         } else {
-            $this->paymentHelper->logger('called', $orderNo);
-            $this->sessionStorage->getPlugin()->setValue('nnBrowserReturnBack', true);
             return $this->response->redirectTo(strtolower($paymentRequestData['lang']) . '/confirmation');
         }
     }
