@@ -1010,13 +1010,14 @@ class PaymentService
             $serverRequestData['data']['payment_type'] = 'GUARANTEED_INVOICE';
             $serverRequestData['data']['key']          = '41';
         }
+        
         $response = $this->paymentHelper->executeCurl($serverRequestData['data'], $serverRequestData['url']);
         $responseData = $this->paymentHelper->convertStringToArray($response['response'], '&');
         $notificationMessage = $this->paymentHelper->getNovalnetStatusText($responseData);
         $responseData['payment_id'] = (!empty($responseData['payment_id'])) ? $responseData['payment_id'] : $responseData['key'];
         $isPaymentSuccess = isset($responseData['status']) && $responseData['status'] == '100';
         $this->sessionStorage->getPlugin()->setValue('nnPaymentData', array_merge($serverRequestData['data'], $responseData));
-        
+        $this->sessionStorage->getPlugin()->setValue('nnPaymentRequestSend', true);
         if($isPaymentSuccess)
         {           
             if(isset($serverRequestData['data']['pan_hash']))
