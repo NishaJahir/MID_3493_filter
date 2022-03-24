@@ -278,6 +278,7 @@ class PaymentController extends Controller
                                                                 'nnPaymentUrl' => $paymentUrl
                                    ]);
         } else {
+            $this->paymentHelper->logger('called', $orderNo);
             $this->sessionStorage->getPlugin()->setValue('nnBrowserReturnBack', true);
             return $this->response->redirectTo(strtolower($paymentRequestData['lang']) . '/confirmation');
         }
