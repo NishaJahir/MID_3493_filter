@@ -1060,4 +1060,20 @@ class PaymentService
      
     }
     
+    public function insertRequestDetailsForReinit($requestData) {
+        
+        $this->getLogger(__METHOD__)->error('reee', $requestData);
+        $paymentRequestData = [
+            'amount'           => $requestData['amount'] * 100,
+            'callback_amount'  => in_array($requestData['key'], ['27', '59']) ? 0 : $requestData['amount'] * 100,
+            'tid'              => '0',
+            'ref_tid'          => '0',
+            'payment_name'     => $requestData['payment_method'],
+            'order_no'         => $requestData['order_no'],
+            'additional_info'  => json_encode('is_novalnet_callback_executed' => false)
+        ];
+        
+        $this->transactionLogData->saveTransaction($paymentRequestData);
+    }
+    
 }
