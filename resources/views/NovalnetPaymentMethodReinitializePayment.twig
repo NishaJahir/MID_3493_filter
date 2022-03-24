@@ -13,7 +13,7 @@
     {% set paidStatus = property.value %}
   {% endif %}
 {% endfor %}
-{% if (paymentId == paymentMethodId) and (paidStatus != 'fullyPaid') and (isPaymentRequestSend != true) %}
+{% if (paymentId == paymentMethodId) and (paidStatus != 'fullyPaid') %}
   {% set display = "block" %}
 {% else %}
   {% set display = "none" %}
@@ -23,7 +23,6 @@
 {{paymentMethodId}}
 {{display}}
 {{paymentKey}}
-{{isPaymentRequestSend}}
 
 {% if 'NOVALNET' in paymentKey %}
   {% if services.template.isCurrentTemplate('tpl.confirmation') %}
