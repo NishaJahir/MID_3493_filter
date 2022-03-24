@@ -119,14 +119,16 @@ class NovalnetPaymentMethodReinitializePayment
       
      // Get value from the session for the communication break check
      $isPaymentRequestSend = $sessionStorage->getPlugin()->getValue('nnPaymentRequestSend');
-     $sessionStorage->getPlugin()->setValue('nnPaymentRequestSend', null);
+     $reinitPageCalled = $isPaymentRequestSend;
+     $t = $sessionStorage->getPlugin()->setValue('nnPaymentRequestSend', null);
 
-       $paymentHelper->logger('54321', $isPaymentRequestSend);
-     $reinitPageCalled = 'yes';
+       $paymentHelper->logger('789654', $reinitPageCalled);
+    $paymentHelper->logger('79', $t);
+
    
     
        // If the Novalnet payments are rejected do the reinitialize payment
-       if( strpos($paymentKey, 'NOVALNET') !== false &&  ( (!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || (empty($tid_status) && $reinitPageCalled == 'yes') )) {
+       if( strpos($paymentKey, 'NOVALNET') !== false &&  ( (!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || (empty($tid_status) && $reinitPageCalled != true) )) {
           return $twig->render('Novalnet::NovalnetPaymentMethodReinitializePayment', [
             'order' => $order, 
             'paymentMethodId' => $mopId,
