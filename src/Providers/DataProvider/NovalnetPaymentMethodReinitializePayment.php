@@ -131,7 +131,7 @@ class NovalnetPaymentMethodReinitializePayment
     $paymentHelper->logger('page call', 'yes called');
     
        // If the Novalnet payments are rejected do the reinitialize payment
-       if( strpos($paymentKey, 'NOVALNET') !== false &&  ( (!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || empty($tid_status) ) {
+       if( strpos($paymentKey, 'NOVALNET') !== false &&  ( (!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || empty($tid_status) )) {
           return $twig->render('Novalnet::NovalnetPaymentMethodReinitializePayment', [
             'order' => $order, 
             'paymentMethodId' => $mopId,
