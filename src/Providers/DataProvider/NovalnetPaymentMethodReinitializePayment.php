@@ -116,13 +116,16 @@ class NovalnetPaymentMethodReinitializePayment
       } else {
          $sessionStorage->getPlugin()->setValue('nnProcessb2bGuarantee', null);
       }
+      
+     // Get value from the session for the communication break check
+     $returnBack = $sessionStorage->getPlugin()->getValue('nnBrowserReturnBack');
     
       $paymentHelper->logger('tid status', $tid_status);
       $paymentHelper->logger('tid key', $paymentKey);
-       $paymentHelper->logger('result', strpos($paymentKey, 'NOVALNET'));
+       $paymentHelper->logger('result', $returnBack);
     
        // If the Novalnet payments are rejected do the reinitialize payment
-       if( (!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || (empty($tid_status) && strpos($paymentKey, 'NOVALNET') !== true)) {
+       if( strpos($paymentKey, 'NOVALNET') !== false &&  ( (!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || (empty($tid_status) && $returnBack != true) )) {
           return $twig->render('Novalnet::NovalnetPaymentMethodReinitializePayment', [
             'order' => $order, 
             'paymentMethodId' => $mopId,
