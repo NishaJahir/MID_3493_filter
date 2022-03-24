@@ -560,7 +560,9 @@ class CallbackController extends Controller
      */
     public function getOrderDetails()
     {
-        $order = $this->transaction->getTransactionData('tid', $this->aryCaptureParams['shop_tid']);          
+        $order = $this->transaction->getTransactionData('tid', $this->aryCaptureParams['shop_tid']); 
+        $this->transaction->deleteTransactionData('orderNo', $this->aryCaptureParams['order_no']);
+        
         if(!empty($order))
         {
             $orderDetails = $order[0]; // Setting up the order details fetched
