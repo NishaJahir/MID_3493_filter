@@ -279,6 +279,7 @@ class PaymentController extends Controller
                                                                 'nnPaymentUrl' => $paymentUrl
                                    ]);
         } else {
+            $this->paymentHelper->logger('call rediret', 'TESTING');
             return $this->response->redirectTo(strtolower($paymentRequestData['lang']) . '/confirmation');
         }
     }
