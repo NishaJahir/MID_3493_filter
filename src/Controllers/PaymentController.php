@@ -281,8 +281,9 @@ class PaymentController extends Controller
                 }
          }
         
+         $tid_status = $this->paymentHelper->getNovalnetTxStatus($paymentRequestData['order_no']);
         
-        if(!empty($paymentRequestData['order_no']) && $sendPaymentCall == true) {
+        if(!empty($paymentRequestData['order_no']) && $sendPaymentCall == true && empty($tid_status)) {
             $this->paymentService->insertRequestDetailsForReinit($paymentRequestData);
             $this->sessionStorage->getPlugin()->setValue('nnPaymentDataUpdated', $paymentRequestData);  
             return $this->twig->render('Novalnet::NovalnetPaymentRedirectForm', [
