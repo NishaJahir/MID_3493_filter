@@ -272,8 +272,18 @@ class PaymentController extends Controller
         $this->sessionStorage->getPlugin()->setValue('nnPaymentData', null);
         $this->sessionStorage->getPlugin()->setValue('nnOrderNo', null);
         $this->sessionStorage->getPlugin()->setValue('nnPaymentRequestSend', true);
-        $this->paymentService->insertRequestDetailsForReinit($paymentRequestData);
-        if(!empty($paymentRequestData['order_no'])) {
+        $sendPaymentCall = true;
+        $orderDetails = $this->transactionLogData->getTransactionData('orderNo', $paymentRequestData['order_no']);
+        foreach($orderDetails as $orderDetail) {
+                $additionalInfo = json_decode($orderDetail->additionalInfo, true);
+                if(isset($additionalInfo['is_novalnet_callback_executed'])) {
+                    $sendPaymentCall = false;
+                }
+         }
+        
+        
+        if(!empty($paymentRequestData['order_no']) && $sendPaymentCall == true) {
+            $this->paymentService->insertRequestDetailsForReinit($paymentRequestData);
             $this->sessionStorage->getPlugin()->setValue('nnPaymentDataUpdated', $paymentRequestData);  
             return $this->twig->render('Novalnet::NovalnetPaymentRedirectForm', [
                                                                'formData'     => $paymentRequestData,
