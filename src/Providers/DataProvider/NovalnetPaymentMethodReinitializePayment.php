@@ -122,13 +122,11 @@ class NovalnetPaymentMethodReinitializePayment
      $sessionStorage->getPlugin()->setValue('nnPaymentRequestSend', null);
 
        $paymentHelper->logger('54321', $isPaymentRequestSend);
-    
-     if($isPaymentRequestSend != true) {
-        $displayReinit = 'display';
-     }
+     $reinitPageCalled = 'yes';
+   
     
        // If the Novalnet payments are rejected do the reinitialize payment
-       if( strpos($paymentKey, 'NOVALNET') !== false &&  ( (!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || (empty($tid_status) && $isPaymentRequestSend != true) )) {
+       if( strpos($paymentKey, 'NOVALNET') !== false &&  ( (!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || (empty($tid_status) && $reinitPageCalled == 'yes') )) {
           return $twig->render('Novalnet::NovalnetPaymentMethodReinitializePayment', [
             'order' => $order, 
             'paymentMethodId' => $mopId,
@@ -146,7 +144,7 @@ class NovalnetPaymentMethodReinitializePayment
             'orderAmount' => $orderAmount,
             'billingAddressId' => $order['billingAddress']['id'],
             'shippingAddressId' => $order['deliveryAddress']['id'],
-            'isPaymentRequestSend' => $displayReinit
+            'isPaymentRequestSend' => $reinitPageCalled
           ]);
        } else {
           return '';
