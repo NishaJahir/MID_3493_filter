@@ -121,10 +121,10 @@ class NovalnetPaymentMethodReinitializePayment
      $isPaymentRequestSend = $sessionStorage->getPlugin()->getValue('nnPaymentRequestSend');
      $sessionStorage->getPlugin()->setValue('nnPaymentRequestSend', null);
 
-       $paymentHelper->logger('12345', $isPaymentRequestSend);
+       $paymentHelper->logger('54321', $isPaymentRequestSend);
     
      if($isPaymentRequestSend != true) {
-        $isPaymentRequestSend = 'disable';
+        $displayReinit = 'display';
      }
     
        // If the Novalnet payments are rejected do the reinitialize payment
@@ -146,7 +146,7 @@ class NovalnetPaymentMethodReinitializePayment
             'orderAmount' => $orderAmount,
             'billingAddressId' => $order['billingAddress']['id'],
             'shippingAddressId' => $order['deliveryAddress']['id'],
-            'isPaymentRequestSend' => $isPaymentRequestSend
+            'isPaymentRequestSend' => $displayReinit
           ]);
        } else {
           return '';
