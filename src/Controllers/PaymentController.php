@@ -277,9 +277,10 @@ class PaymentController extends Controller
                                                                'formData'     => $paymentRequestData,
                                                                 'nnPaymentUrl' => $paymentUrl
                                    ]);
-        } else {            
+        } else {
+            $this->sessionStorage->getPlugin()->setValue('nnBrowserReturnBack', true);
             return $this->response->redirectTo(strtolower($paymentRequestData['lang']) . '/confirmation');
-          }
+        }
     }
     
     /**
