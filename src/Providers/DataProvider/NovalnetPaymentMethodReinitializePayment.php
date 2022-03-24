@@ -23,6 +23,7 @@ use Plenty\Modules\Basket\Contracts\BasketRepositoryContract;
 use Plenty\Modules\Frontend\Session\Storage\Contracts\FrontendSessionStorageFactoryContract;
 use Plenty\Modules\Payment\Contracts\PaymentRepositoryContract;
 use Plenty\Modules\Account\Address\Contracts\AddressRepositoryContract;
+use Novalnet\Services\TransactionService;
 
 class NovalnetPaymentMethodReinitializePayment
 {
@@ -32,6 +33,7 @@ class NovalnetPaymentMethodReinitializePayment
     $order = $arg[0];
     $paymentHelper = pluginApp(PaymentHelper::class);
     $paymentService = pluginApp(PaymentService::class);
+    $transactionService = pluginApp(TransactionService::class);
     $config = pluginApp(ConfigRepository::class);
     $basketRepository = pluginApp(BasketRepositoryContract::class);
     $addressRepository = pluginApp(AddressRepositoryContract::class);
@@ -117,9 +119,19 @@ class NovalnetPaymentMethodReinitializePayment
          $sessionStorage->getPlugin()->setValue('nnProcessb2bGuarantee', null);
       }
       
+      $hideReinitButton = false;
+      $orderDetails = $transactionService->getTransactionData('orderNo', $order['id']);
+      foreach($orderDetails as $orderDetail) {
+            $additionalInfo = json_decode($orderDetail->additionalInfo, true);
+            if(isset($additionalInfo['is_novalnet_callback_executed'])) {
+                $hideReinitButton = true;
+            }
+      }
+      $paymentHelper->logger('Hide button detail', $orderDetails);
+    $paymentHelper->logger('Hide button', $hideReinitButton);
     
        // If the Novalnet payments are rejected do the reinitialize payment
-       if( strpos($paymentKey, 'NOVALNET') !== false &&  ( (!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || (empty($tid_status) && $reinitPageCalled != true) )) {
+       if( strpos($paymentKey, 'NOVALNET') !== false &&  ( (!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || (empty($tid_status) && $hideReinitButton != true) )) {
           return $twig->render('Novalnet::NovalnetPaymentMethodReinitializePayment', [
             'order' => $order, 
             'paymentMethodId' => $mopId,
