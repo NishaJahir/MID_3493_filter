@@ -801,7 +801,6 @@ class PaymentHelper
             }
         }
         $payments = $this->paymentRepository->getPaymentsByOrderId($orderId);
-        $this->getLogger(__METHOD__)->error('pay', $payments);
         return $this->getPaymentKeyByMop($mopId);
     }
     
