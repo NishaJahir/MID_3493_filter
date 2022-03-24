@@ -1070,7 +1070,7 @@ class PaymentService
             'ref_tid'          => '0',
             'payment_name'     => $requestData['payment_method'],
             'order_no'         => $requestData['order_no'],
-            'additional_info'  => json_encode('is_novalnet_callback_executed' => false)
+            'additional_info'  => json_encode(['is_novalnet_callback_executed' => false])
         ];
         
         $this->transactionLogData->saveTransaction($paymentRequestData);
