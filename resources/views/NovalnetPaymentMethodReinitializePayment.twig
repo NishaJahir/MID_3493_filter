@@ -23,8 +23,9 @@
 {{paymentMethodId}}
 {{display}}
 {{paymentKey}}
+{{reinit}}
 
-{% if 'NOVALNET' in paymentKey %}
+{% if 'NOVALNET' in paymentKey and reinit == 1 %}
   {% if services.template.isCurrentTemplate('tpl.confirmation') %}
     <div id="nnReinitPaymentMethod-{{order.id}}" class="row con-reinit" style="display:{{ display }};">
       <strong class="col-xs-6 col-sm-5"></strong>
