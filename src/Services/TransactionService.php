@@ -92,6 +92,14 @@ class TransactionService
         $database->save($order);
     }
     
+    /**
+     * Delete the transaction data if payment complete
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * return none
+     */
     public function deleteTransactionData($key, $value)
     {
         $database = pluginApp(DataBase::class);
