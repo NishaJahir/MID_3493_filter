@@ -271,19 +271,11 @@ class PaymentController extends Controller
         $paymentUrl = $this->sessionStorage->getPlugin()->getValue('nnPaymentUrl');
         $this->sessionStorage->getPlugin()->setValue('nnPaymentData', null);
         $this->sessionStorage->getPlugin()->setValue('nnOrderNo', null);
-        $this->sessionStorage->getPlugin()->setValue('nnPaymentRequestSend', true);
-        $sendPaymentCall = true;
-        $orderDetails = $this->transaction->getTransactionData('orderNo', $paymentRequestData['order_no']);
-        foreach($orderDetails as $orderDetail) {
-                $additionalInfo = json_decode($orderDetail->additionalInfo, true);
-                if(isset($additionalInfo['is_novalnet_callback_executed'])) {
-                    $sendPaymentCall = false;
-                }
-         }
         
-         $tid_status = $this->paymentHelper->getNovalnetTxStatus($paymentRequestData['order_no']);
+        $sendPaymentRequest = $this->paymentService->checkPaymentRequestSend($paymentRequestData['order_no']);
+        $tid_status = $this->paymentHelper->getNovalnetTxStatus($paymentRequestData['order_no']);
         
-        if(!empty($paymentRequestData['order_no']) && $sendPaymentCall == true && empty($tid_status)) {
+        if(!empty($paymentRequestData['order_no']) && $sendPaymentCall == true && (empty($tid_status) || (!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) ) ) {
             $this->paymentService->insertRequestDetailsForReinit($paymentRequestData);
             $this->sessionStorage->getPlugin()->setValue('nnPaymentDataUpdated', $paymentRequestData);  
             return $this->twig->render('Novalnet::NovalnetPaymentRedirectForm', [
