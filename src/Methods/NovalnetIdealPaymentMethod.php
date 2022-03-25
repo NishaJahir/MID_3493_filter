@@ -167,21 +167,14 @@ class NovalnetIdealPaymentMethod extends PaymentMethodService
      */
     public function isSwitchableFrom($orderId = null): bool
     {
-    if($orderId > 0) {
-        $tid_status = $this->paymentHelper->getNovalnetTxStatus($orderId);
-        $sendPaymentCall = true;
-        $orderDetails = $this->transaction->getTransactionData('orderNo', $orderId);
-        foreach($orderDetails as $orderDetail) {
-                $additionalInfo = json_decode($orderDetail->additionalInfo, true);
-                if(isset($additionalInfo['is_novalnet_callback_executed'])) {
-                    $sendPaymentCall = false;
-                }
-         }
-        $this->paymentHelper->logger('call change', $sendPaymentCall);
-        if((!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || ($sendPaymentCall == true && empty($tid_status)) ) {
-            return true;
+        if($orderId > 0) {
+            $sendPaymentRequest = $this->paymentService->checkPaymentRequestSend($orderId);
+            $tid_status = $this->paymentHelper->getNovalnetTxStatus($orderId);
+
+            if((!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) || ($sendPaymentRequest == true && empty($tid_status)) ) {
+                return true;
+            }
         }
-        }
-        return false;
+            return false;
     }
 }
