@@ -278,7 +278,7 @@ class PaymentController extends Controller
         $this->paymentHelper->logger('already send', $sendPaymentRequest);
         $this->paymentHelper->logger('already send no', $paymentRequestData['order_no']);
         
-        if(!empty($paymentRequestData['order_no']) || (!empty($paymentRequestData['order_no']) && $sendPaymentRequest == true && empty($tid_status)) ) {
+        if(!empty($paymentRequestData['order_no']) && ( ($sendPaymentRequest == true && empty($tid_status)) || (!empty($tid_status) && !in_array($tid_status, [75, 85, 86, 90, 91, 98, 99, 100, 103])) ) ) {
             $this->paymentService->insertRequestDetailsForReinit($paymentRequestData);
             $this->sessionStorage->getPlugin()->setValue('nnPaymentDataUpdated', $paymentRequestData);  
             return $this->twig->render('Novalnet::NovalnetPaymentRedirectForm', [
