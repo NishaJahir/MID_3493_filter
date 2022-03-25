@@ -1060,9 +1060,15 @@ class PaymentService
      
     }
     
+    /**
+     * insert payment data into Novalnet transaction table
+     *
+     * @param array $requestData
+     *
+     * @return none
+     */
     public function insertRequestDetailsForReinit($requestData) {
-        
-        $this->getLogger(__METHOD__)->error('rebbbbbbbnnnnnnnnnnnee', $requestData);
+
         $paymentRequestData = [
             'amount'           => $requestData['amount'] * 100,
             'callback_amount'  => in_array($requestData['key'], ['27', '59']) ? 0 : $requestData['amount'] * 100,
@@ -1074,6 +1080,27 @@ class PaymentService
         ];
         
         $this->transactionLogData->saveTransaction($paymentRequestData);
+    }
+    
+    /**
+     * Check payment request already send to Novalnet server
+     *
+     * @param int $orderId
+     *
+     * @return bool
+     */
+    public function checkPaymentRequestSend($orderId) {
+        $sendPaymentCall = true;
+        if(!empty($orderId)) {
+            $orderDetails = $this->transactionLogData->getTransactionData('orderNo', $orderId);
+            foreach($orderDetails as $orderDetail) {
+                    $additionalInfo = json_decode($orderDetail->additionalInfo, true);
+                    if(isset($additionalInfo['is_novalnet_callback_executed'])) {
+                        $sendPaymentCall = false;
+                    }
+             }
+        }
+        return $sendPaymentCall;
     }
     
 }
