@@ -107,7 +107,7 @@ class NovalnetPaymentMethodReinitializePayment
       $billingAddressId = !empty($basket->customerInvoiceAddressId) ? $basket->customerInvoiceAddressId : $order['billingAddress']['id'];
      $paymentHelper->logger('cal 1', $billingAddressId);
       
-      $address = $addressRepository->findAddressById($billingAddressId);
+      $address = $paymentHelper->getCustomerBillingOrShippingAddress((int) $billingAddressId);
     $paymentHelper->logger('cal 2', $address);
       foreach ($address->options as $option) {
         if ($option->typeId == 9) {
