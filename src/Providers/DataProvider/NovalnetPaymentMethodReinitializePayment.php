@@ -79,6 +79,9 @@ class NovalnetPaymentMethodReinitializePayment
        $paymentName = $paymentHelper->getCustomizedTranslatedText('template_' . strtolower($paymentKey));
       // Get the orderamount from order object if the basket amount is empty
        $orderAmount = $paymentHelper->ConvertAmountToSmallerUnit($invoiceAmount);
+    
+         $paymentHelper->logger('here come', $order);
+    
       // Form the payment request data
       $serverRequestData = $paymentService->getRequestParameters($basketRepository->load(), $paymentKey, false, $orderAmount, $order['billingAddress']['id'], $order['deliveryAddress']['id']);
  
@@ -102,7 +105,10 @@ class NovalnetPaymentMethodReinitializePayment
      // Get company and birthday values
       $basket = $basketRepository->load();            
       $billingAddressId = !empty($basket->customerInvoiceAddressId) ? $basket->customerInvoiceAddressId : $order['billingAddress']['id'];
+     $paymentHelper->logger('cal 1', $billingAddressId);
+      
       $address = $addressRepository->findAddressById($billingAddressId);
+    $paymentHelper->logger('cal 2', $address);
       foreach ($address->options as $option) {
         if ($option->typeId == 9) {
             $birthday = $option->value;
